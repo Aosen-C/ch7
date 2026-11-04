@@ -24,6 +24,30 @@ public class StockTrader {
 		}
 	}
 	
+	public static int indexOfLowest(double[] prices) {
+		int lowest = prices[0];
+		int index = 0;
+		for (int i = 0; i < prices.length; i++) {
+			if (prices[i] < lowest) {
+				index = i;
+				lowest = prices[i];
+			}
+		}
+		return index;
+	}
+	
+	public static int indexOfHighest(double[] prices) {
+		int highest = 0;
+		int index = 0;
+		for (int i = 0; i < prices.length; i++) {
+			if (prices[i] > highest) {
+				index = i;
+				highest = prices[i];
+			}
+		}
+		return index;
+	}
+	
 	public static void main(String[] args) throws FileNotFoundException {
 	Scanner in = new Scanner(new File("tiny.txt"));
 	String symbol = in.next();
@@ -36,5 +60,8 @@ public class StockTrader {
 	loadData(in, years, months, prices);
 	
 	printData(years, months, prices);
+	
+	System.out.printf();
+	System.out.printf();
 	}
 }
