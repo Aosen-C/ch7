@@ -25,7 +25,7 @@ public class StockTrader {
 	}
 	
 	public static int indexOfLowest(double[] prices) {
-		int lowest = prices[0];
+		double lowest = prices[0];
 		int index = 0;
 		for (int i = 0; i < prices.length; i++) {
 			if (prices[i] < lowest) {
@@ -37,12 +37,24 @@ public class StockTrader {
 	}
 	
 	public static int indexOfHighest(double[] prices) {
-		int highest = 0;
+		double highest = 0;
 		int index = 0;
 		for (int i = 0; i < prices.length; i++) {
 			if (prices[i] > highest) {
 				index = i;
 				highest = prices[i];
+			}
+		}
+		return index;
+	}
+	
+	public static int indexOfBiggestDrop(double[] prices) {
+		double percentDifference = 0;
+		int index = -1;
+		for (int i = 1; i < prices.length; i++) {
+			if ((prices[i] - prices[i-1])/prices[i-1] < percentDifference) {
+				percentDifference = (prices[i] - prices[i-1])/prices[i-1];
+				index = i;
 			}
 		}
 		return index;
@@ -61,7 +73,16 @@ public class StockTrader {
 	
 	printData(years, months, prices);
 	
-	System.out.printf();
-	System.out.printf();
+	int indexLow = indexOfLowest(prices);
+	int indexHigh = indexOfHighest(prices);
+	int indexBiggestDrop = indexOfBiggestDrop(prices);
+	
+	double percentDrop = (prices[indexBiggestDrop] - prices[indexBiggestDrop - 1])/prices[indexBiggestDrop];
+	
+	System.out.printf("TINY lowest: %.2f in %s %d\n", prices[indexLow], monthName(months[indexLow]), years[indexLow]);
+	System.out.printf("TINY highest: %.2f in %s %d\n", prices[indexHigh], monthName(months[indexHigh]), years[indexHigh]);
+	if (indexOfBiggestDrop(prices) != -1) {
+		System.out.printf("TINY biggest drop: %.2f in %s %d\n", percentDrop, monthName(months[indexBiggestDrop]), years[indexBiggestDrop]);
+	}
 	}
 }
