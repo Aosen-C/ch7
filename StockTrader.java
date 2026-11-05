@@ -67,8 +67,42 @@ public class StockTrader {
 		return "BUY";
 	}
 	
+	public static String dipBuyer(double[] history, boolean holding, double boughtAt) {
+		if (!holding && history.length >= 2) {
+			if (history[history.length - 1] < history[history.length - 2] && history[history.length] < history[history.length-1]) {
+				return "BUY";
+			}
+		} else if (holding && history.length >= 2){
+			if (holding && (history[history.length]-boughtAt)/boughtAt > 0.1) {
+				return "SELL";
+		} else {
+			return "HOLD";
+		}
+	}
+	
+	//public static String movingAverage(double[] history, boolean holding, double boughtAt) {
+		//if (history.length < 12) {
+			//return "HOLD";
+		//}
+		//double sum = 0;
+		//for (int i = 0; i < history.length; i++) {
+			//sum += history[i];
+		//}
+		//double average = sum / history.length;
+		//if (!holding) {
+			//if (history[history.length - 1] < average) {
+				//return "BUY";
+			//}
+		//} else {
+			//if (history[history.length - 1] > average) {
+				//return "SELL";
+			//}
+		//}
+		//return "HOLD";
+	//}
+	
 	public static String decide(double[] history, boolean holding, double boughtAt) {
-		return buyAndHold(history, holding, boughtAt);
+		return dipBuyer(history, holding, boughtAt);
 	}
 	
 	public static double simulate(int[] years, int[] months, double[] prices) {
