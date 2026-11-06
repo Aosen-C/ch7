@@ -68,41 +68,39 @@ public class StockTrader {
 	}
 	
 	public static String dipBuyer(double[] history, boolean holding, double boughtAt) {
-		if (!holding && history.length >= 2) {
-			if (history[history.length - 1] < history[history.length - 2] && history[history.length] < history[history.length-1]) {
+		if (!holding && history.length >= 3) {
+			if (history[history.length - 2] < history[history.length - 3] && history[history.length-1] < history[history.length-2]) {
 				return "BUY";
 			}
-		} else if (holding && history.length >= 2){
-			if (holding && (history[history.length]-boughtAt)/boughtAt > 0.1) {
+		} else if (holding && history.length >= 3){
+			if (holding && (history[history.length - 1]-boughtAt)/boughtAt > 0.1) {
 				return "SELL";
-		} else {
+			}
+		} 
+		return "HOLD";
+	} 
+	
+	public static String movingAverage(double[] history, boolean holding, double boughtAt) {
+		if (history.length < 12) {
 			return "HOLD";
 		}
+		double sum = 0;
+		int indexOf12MonthsBefore = history.length - 12;
+		for (int i = indexOf12MonthsBefore; i < history.length; i++) {
+			sum += history[i];
+		}
+		double average = sum/12;
+		
+		if (!holding && history[history.length - 1] > average) {
+			return "BUY";
+		} else if (holding && history[history.length - 1] < average) {
+			return "SELL";
+		}
+		return "HOLD";
 	}
 	
-	//public static String movingAverage(double[] history, boolean holding, double boughtAt) {
-		//if (history.length < 12) {
-			//return "HOLD";
-		//}
-		//double sum = 0;
-		//for (int i = 0; i < history.length; i++) {
-			//sum += history[i];
-		//}
-		//double average = sum / history.length;
-		//if (!holding) {
-			//if (history[history.length - 1] < average) {
-				//return "BUY";
-			//}
-		//} else {
-			//if (history[history.length - 1] > average) {
-				//return "SELL";
-			//}
-		//}
-		//return "HOLD";
-	//}
-	
 	public static String decide(double[] history, boolean holding, double boughtAt) {
-		return dipBuyer(history, holding, boughtAt);
+		return movingAverage(history, holding, boughtAt);
 	}
 	
 	public static double simulate(int[] years, int[] months, double[] prices) {
@@ -159,9 +157,9 @@ public class StockTrader {
 	if (indexOfBiggestDrop(prices) != -1) {
 		double percentDrop = Math.abs((prices[indexBiggestDrop] - prices[indexBiggestDrop - 1])/prices[indexBiggestDrop-1]) * 100;
 		System.out.printf("%s biggest drop: %.2f%% in %s %d\n", symbol, percentDrop, monthName(months[indexBiggestDrop]), years[indexBiggestDrop]);
+	}
 	
 	System.out.println();	
 	System.out.printf("Your final cash: $%.2f", simulate(years, months, prices));
-	}
 	}
 }
