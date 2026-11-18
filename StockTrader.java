@@ -3,8 +3,10 @@
 // Both timings make sense. The Great Depression occured from 1929 to 1939 so it is expected that sp500_1925_1945 would have its lowest price in 1932. The 2008 financial crisis occured in 2008, making it reasonable for sbux_2007_2016 to have its lowest price in 2008.
 
 // Part E Questions
+// Dip Buyer did the best on the most files. No strategy was the best on every file.
 // Dip buyer performed poorly on falling.txt because when dip buyer bought into a "dip" the prices never went up to make any profit.
 // Moving average beat buy and hold on falling.txt. That is because buy and hold immediately buys a share, but the prices keep on falling so it receives a significant loss. Moving average detects that the stock's trend is always decreasing because the price is always below the 12 month average. Thus, it does not buy the stock trending downward.
+// My strategy did better than Buy and Hold on 5 stocks. If I changed my rules to do better on one stock, it would decrease my profit on others.
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -69,8 +71,7 @@ public class StockTrader {
 	}
 	
 	public static final double START_CASH = 10000.0;
-	public static final double FEE = 10.0;
-	
+	public static final double FEE = 10.0;	
 	public static String buyAndHold(double[] history, boolean holding, double boughtAt) {
 		return "BUY";
 	}
